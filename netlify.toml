@@ -1,0 +1,41 @@
+# Netlify settings for the Ana Mariposa Jewelry site.
+# Netlify republishes the site every time the GitHub repository changes,
+# including every save Ana makes in the admin screen (Pages CMS).
+
+[build]
+  # The site is plain HTML, so there's nothing to compile. Before publishing,
+  # shrink any large photos Ana uploaded so pages load quickly. If that step
+  # can't run for any reason, the site still publishes with the original photos.
+  command = "(python3 -m pip install --quiet pillow && python3 scripts/optimize_images.py images/pieces) || echo 'Photo shrinking skipped'"
+  publish = "."
+
+# Always check for the latest list of pieces, so Ana's changes show up right away.
+[[headers]]
+  for = "/content/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Keep the admin and build files out of the public site.
+[[redirects]]
+  from = "/scripts/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.pages.yml"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/README.md"
+  to = "/404"
+  status = 404
+  force = true

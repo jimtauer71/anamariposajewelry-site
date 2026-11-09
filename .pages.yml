@@ -1,0 +1,45 @@
+# Pages CMS settings: this is what Ana sees when she signs in at app.pagescms.org.
+# Every piece of jewelry on the site is one entry in content/pieces.json.
+
+media:
+  input: images/pieces
+  output: /images/pieces
+  extensions: [jpg, jpeg, png, webp]
+
+content:
+  - name: pieces
+    label: Jewelry pieces
+    type: file
+    path: content/pieces.json
+    format: json
+    list: true
+    fields:
+      - name: title
+        label: Name of the piece
+        type: string
+        required: true
+      - name: category
+        label: Category (which page it appears on)
+        type: select
+        required: true
+        options:
+          values:
+            - name: necklaces
+              label: Gemstone Jewelry - Necklaces
+            - name: bracelets
+              label: Gemstone Jewelry - Bracelets
+            - name: earrings
+              label: Gemstone Jewelry - Earrings
+            - name: seed-bead
+              label: Seed Bead Jewelry
+            - name: custom
+              label: Custom Designs
+            - name: redesign
+              label: Re-Design (Remade & Refreshed)
+      - name: description
+        label: Description (optional)
+        type: text
+      - name: image
+        label: Photo
+        type: image
+        required: true
