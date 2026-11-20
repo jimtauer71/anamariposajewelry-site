@@ -1,0 +1,56 @@
+# Publishes the site to GitHub Pages every time something changes,
+# including every save Ana makes in Pages CMS.
+# Before publishing, it shrinks any large uploaded photos.
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Shrink large photos
+        run: |
+          pip install pillow
+          python scripts/optimize_images.py images/pieces
+
+      - name: Save the smaller photos back to the repository
+        run: |
+          if [ -n "$(git status --porcelain images)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add images
+            git commit -m "Shrink uploaded photos for the web"
+            git pull --rebase
+            git push
+          fi
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
