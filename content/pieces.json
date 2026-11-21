@@ -318,5 +318,11 @@
     "title": "17.5” Amethyst Necklace w/1” Extender - $50.00",
     "category": "necklaces",
     "image": "/images/pieces/IMG_0837.jpg"
+  },
+  {
+    "title": "test",
+    "category": "necklaces",
+    "description": "test",
+    "image": "/images/pieces/image0.png"
   }
 ]
